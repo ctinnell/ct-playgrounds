@@ -1,20 +1,30 @@
 import Darwin
 
-func isSquare(number: Int) -> Bool {
-    let root = sqrt(Double(number))
-    return (Double((Int(root))) == root) ? true : false
-}
-
 func numSquares(startNumber: Int, endNumber: Int) -> Int {
-    var numsquares = 0
-    for var num in startNumber...endNumber {
-        if isSquare(num) {
-            numsquares = numsquares + 1
-        }
+    let squareRootStart = sqrt(Double(startNumber))
+    let squareRootEnd = sqrt(Double(endNumber))
+    
+    let startRoot = floor(squareRootStart)
+    let endRoot = (ceil(squareRootEnd))
+//    print("square root start = \(sqrt(Double(startNumber)))")
+//    print("square root end = \(sqrt(Double(endNumber)))")
+//    print("startRoot = \(startRoot)")
+//    print("endRoot = \(endRoot)")
+    var numsquares = ((endRoot-1) - startRoot)
+    if squareRootStart == startRoot {
+        numsquares = numsquares + 1
     }
-    return numsquares
+    if squareRootEnd == endRoot {
+        numsquares = numsquares + 1
+    }
+    
+    return Int(numsquares)
 }
 
-let inputs = [3,9]
+var inputs = [465868129,988379794]
+//inputs = [17,24]
+//inputs = [3,9]
 let numberOfSquares = numSquares(inputs[0], endNumber: inputs[1])
 print(numberOfSquares)
+
+
