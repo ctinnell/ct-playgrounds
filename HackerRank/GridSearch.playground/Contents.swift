@@ -89,7 +89,9 @@ func locateString(stringToLocate: String, baseString: String) -> [Range<String.I
 }
 
 func matrixStringContainsPatternString(matrixString: String, patternString: String, range: Range<String.Index>) -> Bool {
+    //print("match2. matrixString = ",matrixString)
     let trimmedMatrixString = matrixString.substringWithRange(range)
+    //print("match2. trimmedMatrixString = ",trimmedMatrixString)
     return locateString(patternString, baseString: trimmedMatrixString).count > 0
 }
 
@@ -105,14 +107,21 @@ func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
         for match in matches {
             print("match: ",match, " line: ",x)
             var matchCounter = 1
-            for var y=x+1; y<matrix.count; y++ {
-                var patternCounter = 1
-                if matrixStringContainsPatternString(matrix[y], patternString: pattern[patternCounter], range: match) {
+            var patternCounter = 1
+            var matrixCounter = x+1
+            for var y=1; y<pattern.count; y++ {
+                print("match. matrix[\(y)] =",matrix[matrixCounter]," patternString: ", pattern[patternCounter])
+                if matrixStringContainsPatternString(matrix[matrixCounter], patternString: pattern[patternCounter], range: match) {
+                    //print("match2. patternCounter: ", patternCounter, "y: ", y)
+                    //print("match2. matrix[y] =",matrix[matrixCounter]," patternString: ", pattern[patternCounter])
+                    //print("match2. range = ",match)
                     matchCounter = matchCounter + 1
+                    print("matchCounter = ",matchCounter, "patterncount = ",pattern.count)
                     if matchCounter >= pattern.count {
-                        return containsPattern
+                        return true
                     }
                     patternCounter = patternCounter + 1
+                    matrixCounter = matrixCounter + 1
                 }
                 else {
                     break
