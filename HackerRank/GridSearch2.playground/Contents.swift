@@ -38,7 +38,7 @@ var input = ["2",
     "99",
     "99"]
 
-input = ["1",
+/*input = ["1",
     "5 15",
     "111111111111111",
     "111111111111111",
@@ -48,8 +48,7 @@ input = ["1",
     "3 5",
     "11111",
     "11111",
-    "11110"]
-
+    "11110"]*/
 
 func readLineAsInt() -> Int {
     let value = Int(input[row])!
@@ -77,22 +76,40 @@ func nextMatrix() -> [String] {
     return matrix
 }
 
-func fullPatternMatches(matrix: [String], locationOfFirstLineMatch: Int, pattern: [String]) -> Bool {
+func rangeForSearch(matrix: [String], matrixLine: Int, matrixColumn: Int, pattern: [String]) -> Range<String.Index> {
+    let matrixLineString = matrix[matrixLine]
+    let start = matrixLineString.startIndex.advancedBy(matrixColumn)
+    let end = start.advancedBy(pattern[0].characters.count)
+    return Range(start: start, end: end)
+}
+
+
+func fullPatternMatches(matrix: [String], rowOfFirstLineMatch: Int, matrixColumn: Int, pattern: [String]) -> Bool {
     var containsPattern = false
+    var row = rowOfFirstLineMatch+1
+    for var x=1; x<=pattern.count-1; x++ {
+        if matrixContainsPatternStartingAtLine(matrix, matrixLine: row, matrixColumn: matrixColumn, pattern: pattern, patternRow: x) {
+            containsPattern = true
+        }
+        else {
+            containsPattern = false
+            break
+        }
+        row = row+1
+    }
     
     return containsPattern
 }
 
-func matrixContainsPatternStartingAtLine(matrix: [String], matrixLine: Int, matrixColumn: Int, pattern: [String]) -> Bool {
+func matrixContainsPatternStartingAtLine(matrix: [String], matrixLine: Int, matrixColumn: Int, pattern: [String], patternRow: Int) -> Bool {
     let matrixLineString = matrix[matrixLine]
-    let start = matrixLineString.startIndex.advancedBy(matrixColumn)
-    let end = start.advancedBy(pattern[0].characters.count - 1)
-    let range = Range(start: start, end: end)
-    return (matrixLineString.substringWithRange(range) == pattern[0])
+    let range = rangeForSearch(matrix, matrixLine: matrixLine, matrixColumn: matrixColumn, pattern: pattern)
+    return (matrixLineString.substringWithRange(range) == pattern[patternRow])
 }
 
 func patternWidthCanStillFitInRemainingMatrix(matrix: [String], matrixColumn: Int, pattern: [String]) -> Bool {
-    return (matrix[0].characters.count - (matrixColumn - 1)) >= pattern[0].characters.count
+    //print(matrix[0].characters.count, matrixColumn, pattern[0].characters.count)
+    return (matrix[0].characters.count - (matrixColumn)) >= pattern[0].characters.count
 }
 
 func patternHeightCanStillFitInRemainingMatrix(matrix: [String], matrixRow: Int, pattern: [String]) -> Bool {
@@ -108,8 +125,8 @@ func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
         guard patternHeightCanStillFitInRemainingMatrix(matrix, matrixRow: currentRow, pattern: pattern) else { return false }
         for currentColumn = 0; currentColumn < matrix[currentRow].characters.count; currentColumn++ {
             guard patternWidthCanStillFitInRemainingMatrix(matrix, matrixColumn: currentColumn, pattern: pattern) else { break }
-            if matrixContainsPatternStartingAtLine(matrix, matrixLine: currentRow, matrixColumn: currentColumn, pattern: pattern) {
-                if fullPatternMatches(matrix, locationOfFirstLineMatch: currentRow, pattern: pattern) {
+            if matrixContainsPatternStartingAtLine(matrix, matrixLine: currentRow, matrixColumn: currentColumn, pattern: pattern, patternRow: 0) {
+                if fullPatternMatches(matrix, rowOfFirstLineMatch: currentRow, matrixColumn: currentColumn, pattern: pattern) {
                     return true
                 }
             }
