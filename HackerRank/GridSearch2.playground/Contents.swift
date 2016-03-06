@@ -58,6 +58,16 @@ input = ["1",
     "11111",
     "11110"]
 
+/*input = ["1",
+    "4 6",
+    "123412",
+    "561212",
+    "123634",
+    "781288",
+    "2 2",
+    "12",
+    "34"]*/
+
 func readLineAsInt() -> Int {
     let value = Int(input[row])!
     row = row + 1
@@ -152,7 +162,7 @@ func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
                     }
                     else {
                         if let nextMatch = indexOfPatternString(matrix, matrixRow: currentRow, matrixColumn: currentColumn+1, patternString: pattern[0]) {
-                            currentColumn = nextMatch
+                            currentColumn = nextMatch-1
                         }
                         else {
                             break
