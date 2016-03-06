@@ -84,21 +84,19 @@ func fullPatternMatches(matrix: [String], locationOfFirstLineMatch: Int, pattern
 }
 
 func matrixContainsPatternStartingAtLine(matrix: [String], matrixLine: Int, matrixColumn: Int, pattern: [String]) -> Bool {
-    var containsPattern = false
-    
-    return containsPattern
+    let matrixLineString = matrix[matrixLine]
+    let start = matrixLineString.startIndex.advancedBy(matrixColumn)
+    let end = start.advancedBy(pattern[0].characters.count - 1)
+    let range = Range(start: start, end: end)
+    return (matrixLineString.substringWithRange(range) == pattern[0])
 }
 
 func patternWidthCanStillFitInRemainingMatrix(matrix: [String], matrixColumn: Int, pattern: [String]) -> Bool {
-    var patternFits = false
-    
-    return patternFits
+    return (matrix[0].characters.count - (matrixColumn - 1)) >= pattern[0].characters.count
 }
 
 func patternHeightCanStillFitInRemainingMatrix(matrix: [String], matrixRow: Int, pattern: [String]) -> Bool {
-    var patternFits = false
-    
-    return patternFits
+    return (matrix.count - (matrixRow - 1)) >= pattern.count
 }
 
 func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
