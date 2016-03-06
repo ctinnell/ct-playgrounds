@@ -45,7 +45,7 @@ var input = ["2",
     "2 2",
     "99",
     "99"]
-/*
+
 input = ["1",
     "5 15",
     "111111111111111",
@@ -56,7 +56,7 @@ input = ["1",
     "3 5",
     "11111",
     "11111",
-    "11110"]*/
+    "11110"]
 
 func readLineAsInt() -> Int {
     let value = Int(input[row])!
@@ -116,7 +116,6 @@ func matrixContainsPatternStartingAtLine(matrix: [String], matrixLine: Int, matr
 }
 
 func patternWidthCanStillFitInRemainingMatrix(matrix: [String], matrixColumn: Int, pattern: [String]) -> Bool {
-    //print(matrix[0].characters.count, matrixColumn, pattern[0].characters.count)
     return (matrix[0].characters.count - (matrixColumn)) >= pattern[0].characters.count
 }
 
@@ -124,11 +123,13 @@ func patternHeightCanStillFitInRemainingMatrix(matrix: [String], matrixRow: Int,
     return (matrix.count - (matrixRow - 1)) >= pattern.count
 }
 
-func indexOfPatternString(matrix: [String], matrixRow: Int, patternString: String) -> (Int?) {
+func indexOfPatternString(matrix: [String], matrixRow: Int, matrixColumn: Int, patternString: String) -> (Int?) {
     var column: Int?
+    let matrixLine = matrix[matrixRow]
+    let searchRange = Range(start: matrixLine.startIndex.advancedBy(matrixColumn), end: matrixLine.endIndex)
     
-    if let range = matrix[matrixRow].rangeOfString(patternString) {
-        column = matrix[matrixRow].startIndex.distanceTo(range.startIndex)
+    if let range = matrixLine.rangeOfString(patternString, options: [], range: searchRange, locale: nil) {
+        column = matrixLine.startIndex.distanceTo(range.startIndex)
     }
     
     return column
@@ -141,13 +142,21 @@ func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
     var currentColumn = 0
     for currentRow = 0; currentRow<matrix.count; currentRow++ {
         guard patternHeightCanStillFitInRemainingMatrix(matrix, matrixRow: currentRow, pattern: pattern) else { return false }
-        if let startingColumn = indexOfPatternString(matrix, matrixRow: currentRow, patternString: pattern[0]) {
-            print(currentRow, startingColumn)
+        if let startingColumn = indexOfPatternString(matrix, matrixRow: currentRow, matrixColumn: 0, patternString: pattern[0]) {
             for currentColumn = startingColumn; currentColumn < matrix[currentRow].characters.count; currentColumn++ {
                 guard patternWidthCanStillFitInRemainingMatrix(matrix, matrixColumn: currentColumn, pattern: pattern) else { break }
+                
                 if matrixContainsPatternStartingAtLine(matrix, matrixLine: currentRow, matrixColumn: currentColumn, pattern: pattern, patternRow: 0) {
                     if fullPatternMatches(matrix, rowOfFirstLineMatch: currentRow, matrixColumn: currentColumn, pattern: pattern) {
                         return true
+                    }
+                    else {
+                        if let nextMatch = indexOfPatternString(matrix, matrixRow: currentRow, matrixColumn: currentColumn+1, patternString: pattern[0]) {
+                            currentColumn = nextMatch
+                        }
+                        else {
+                            break
+                        }
                     }
                 }
             }
