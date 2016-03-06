@@ -1,5 +1,13 @@
 import Foundation
 
+/*
+YES
+YES
+NO
+YES
+NO
+*/
+
 
 var row = 0
 var input = ["2",
@@ -37,8 +45,8 @@ var input = ["2",
     "2 2",
     "99",
     "99"]
-
-/*input = ["1",
+/*
+input = ["1",
     "5 15",
     "111111111111111",
     "111111111111111",
@@ -116,6 +124,16 @@ func patternHeightCanStillFitInRemainingMatrix(matrix: [String], matrixRow: Int,
     return (matrix.count - (matrixRow - 1)) >= pattern.count
 }
 
+func indexOfPatternString(matrix: [String], matrixRow: Int, patternString: String) -> (Int?) {
+    var column: Int?
+    
+    if let range = matrix[matrixRow].rangeOfString(patternString) {
+        column = matrix[matrixRow].startIndex.distanceTo(range.startIndex)
+    }
+    
+    return column
+}
+
 func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
     guard pattern.count <= matrix.count && pattern[0].characters.count <= matrix[0].characters.count else { return false }
     
@@ -123,11 +141,14 @@ func matrixContainsPattern(matrix: [String], pattern: [String]) -> Bool {
     var currentColumn = 0
     for currentRow = 0; currentRow<matrix.count; currentRow++ {
         guard patternHeightCanStillFitInRemainingMatrix(matrix, matrixRow: currentRow, pattern: pattern) else { return false }
-        for currentColumn = 0; currentColumn < matrix[currentRow].characters.count; currentColumn++ {
-            guard patternWidthCanStillFitInRemainingMatrix(matrix, matrixColumn: currentColumn, pattern: pattern) else { break }
-            if matrixContainsPatternStartingAtLine(matrix, matrixLine: currentRow, matrixColumn: currentColumn, pattern: pattern, patternRow: 0) {
-                if fullPatternMatches(matrix, rowOfFirstLineMatch: currentRow, matrixColumn: currentColumn, pattern: pattern) {
-                    return true
+        if let startingColumn = indexOfPatternString(matrix, matrixRow: currentRow, patternString: pattern[0]) {
+            print(currentRow, startingColumn)
+            for currentColumn = startingColumn; currentColumn < matrix[currentRow].characters.count; currentColumn++ {
+                guard patternWidthCanStillFitInRemainingMatrix(matrix, matrixColumn: currentColumn, pattern: pattern) else { break }
+                if matrixContainsPatternStartingAtLine(matrix, matrixLine: currentRow, matrixColumn: currentColumn, pattern: pattern, patternRow: 0) {
+                    if fullPatternMatches(matrix, rowOfFirstLineMatch: currentRow, matrixColumn: currentColumn, pattern: pattern) {
+                        return true
+                    }
                 }
             }
         }
