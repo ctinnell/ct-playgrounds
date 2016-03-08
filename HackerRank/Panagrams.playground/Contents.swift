@@ -1,6 +1,6 @@
 import Foundation
 
-let str1 = "We promptly judged antique ivory buckles for the next prize"
+let str1 = "We promptly judged antique ivory buckles for the next prize!!"
 let str2 = "We promptly judged antique ivory buckles for the prize"
 
 func isPanagram(str: String) -> Bool {
@@ -18,9 +18,8 @@ func panagramDescription(isPan: Bool) -> String {
     return isPan ? "panagram" : "not panagram"
 }
 
-print(panagramDescription(isPanagram(str1)))
-
-print(panagramDescription(isPanagram(str2)))
+print (isPanagram(str1) ? "pangram" : "not pangram")
+print (isPanagram(str2) ? "pangram" : "not pangram")
 
 
 
