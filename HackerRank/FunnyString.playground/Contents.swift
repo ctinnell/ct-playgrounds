@@ -1,6 +1,19 @@
 import Foundation
 
-let input = ["2","acxz","bcxz"]
+var input = ["2","acxz","bcxz"]
+input =
+["10",
+"jkotzxzxrxtzytlruwrxytyzsuzytwyzxuzytryzuzysxvsmupouysywywqlhg",
+"eklrywzvpxtvoptlrskmskszvwzsuzxrtvyzwruqvyxusqwupnurqmtltnltsmuyxqoksyurpwqpv",
+"efhpuvqvnuwpvwysvnunostvpqvxtxsvqwqvsxtxvqpvtsonunvsywvpwunvqvupxzy",
+"otytmpszumnryqvxpvnvxyvpvprumnvsqwqwtsqyqksqvnuqpxszwzsxsx",
+"bhmptlqswsvoqsvzyzwoqtvowpyqxpwurpxutswtrpwzvrpkswzuo",
+"rvovprxzvwrxpwpzsltzutxztrxqxt",
+"ceiosyrtztvnqsuozrxvtqywqwyrxtnjh",
+"djnsyzxszryqworuxpqvqwquvotzsqvoupwvztzupowtqnvpxqyrwutzuys",
+"kovzuywsuvwxuxtwzryzuxyvouvyskoqtwryszxqqxzsyrwtqoksyvuovyxuzyrzwtxuxwvuswuqvryu",
+"ptvzstvotxqyvzrwyqryzrpkswzryupwutmigc"]
+
 var row = 0
 
 func readLineAsInt() -> Int {
@@ -28,8 +41,9 @@ func isFunnyString(s_string: String) -> Bool {
     let r_string = String(s_string.characters.reverse())
     let s = asciValues(s_string)
     let r = asciValues(r_string)
-    
-    for var j=1; j<=s.count; j+=2 {
+    print("s.count ",s.count)
+    for var j=1; j<s.count; j+=2 {
+        print("j=",j)
         if abs(s[j]-s[j-1]) == abs(r[j]-r[j-1]) {
             isFunny = true
         }
